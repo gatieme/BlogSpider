@@ -3,6 +3,8 @@
 
 import TerminalColor
 
+
+
 # 博客类
 
 class Blog:
