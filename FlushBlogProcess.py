@@ -14,7 +14,10 @@ import threading
 
 import random
 
+import signal
+
 import TerminalColor
+
 
 from Blog import Blog
 
@@ -122,6 +125,8 @@ class FlushBlogProcess:
 
         T = threading.Thread(target = self.AccessBlog, args = (blog,))
 
+        T.setDaemon('True')
+
         T.start( )
 
     def SequentialFlushBlog(self):
@@ -134,7 +139,36 @@ class FlushBlogProcess:
 
             T = threading.Thread(target = self.AccessBlog, args = (blog,))
 
+            T.setDaemon('True')
+
             T.start( )
+
+
+
+    def SignalHandler(self, sig, frame):
+        """
+        信号处理函数
+
+        python中得thread的一些机制和C/C++不同：
+            在C/C++中，主线程结束后，其子线程会默认被主线程kill掉。
+            而在python中，主线程结束后，会默认等待子线程结束后，主线程才退出。
+
+        python对于thread的管理中有两个函数：join和setDaemon
+
+            join：如在一个线程B中调用threada.join()，则threada结束后，线程B才会接着threada.join()往后运行。
+            setDaemon：主线程A启动了子线程B，调用b.setDaemaon(True)，则主线程结束时，会把子线程B也杀死，与C/C++中得默认效果是一样的。
+        """
+        try :
+
+            T.stop( )
+            T.join()
+
+        except Exception, ex:
+
+            print ""
+            print "用户输入Ctrl+C 程序终止..."
+
+            exit(0)
 
 
     def Run(self):
@@ -156,6 +190,9 @@ class FlushBlogProcess:
 
         print "--------------------------------------------------"
 
+        signal.signal(signal.SIGTERM, self.SignalHandler)
+        signal.signal(signal.SIGINT, self.SignalHandler)
+
         while 1 :
             if self.flushMode == "random":
 
@@ -164,7 +201,5 @@ class FlushBlogProcess:
             elif self.flushMode == "sequential":
 
                 self.SequentialFlushBlog( )
-
-
 
 
