@@ -5,11 +5,12 @@ import urllib2
 
 import re
 
-import TerminalColor
+#import TerminalColor
 
 from Blog import Blog
 
 
+from colorama import init, Fore, Back, Style
 
 
 
@@ -29,9 +30,9 @@ class DealBlog:
 
         self.blogs      =     []
 
-        print "博客页面: ", self.pageUrl
+        print u"博客页面: ", self.pageUrl
 
-        print "博客页数 = ", self.pageUrl
+        print u"博客页数 = ", self.pageUrl
 
 
 
@@ -45,13 +46,17 @@ class DealBlog:
 
             currPageUrl = self.pageUrl + str(pos)
 
-            print "当前博客页面地址: ", TerminalColor.UseStyle(currPageUrl, fore = "blue")
+            #print u"当前博客页面地址: ", TerminalColor.UseStyle(currPageUrl, fore = "blue")
+            init()
+            print u"当前博客页面地址: ", 
+            print (Fore.BLUE + currPageUrl)
+            print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 
             self.blogPages.append(currPageUrl) # 每个博客页面的地址
 
 
 
-        print "获取到的博客页面信息[SUCCESS]:"
+        print u"获取到的博客页面信息[SUCCESS]:"
 
         print self.blogPages
 
@@ -63,9 +68,9 @@ class DealBlog:
 
     def GetBlogUrl(self):
 
-        print "开始获取博客地址......"
+        print u"开始获取博客地址......"
 
-        print "依次访问每个博客列表页面"
+        print u"依次访问每个博客列表页面"
 
         for url in self.blogPages:                # 访问每一个博客页面
 
@@ -77,26 +82,23 @@ class DealBlog:
 
 
 
-            print "获取到博客列表页面HTML源码"
+            print u"获取到博客列表页面HTML源码"
 
             try:
 
                 cn = urllib2.urlopen(req)
 
-                print "开始访问博客列表页面: ", url
-
+                print u"开始访问博客列表页面: ", url
+                
                 page = cn.read( )
 
                 unicodePage = page.decode("utf-8")
-
-
+                
                 cn.close( )
 
             except urllib2.URLError, e:
 
-
                 if hasattr(e, "reason"):
-
 
                     print "Failed to reach the server"
 
@@ -121,7 +123,7 @@ class DealBlog:
 
             # 从博客页面中匹配出每个博客的地址
 
-            print "开始用正则表达式匹配博客信息......"
+            print u"开始用正则表达式匹配博客信息......"
 
 
 
@@ -135,7 +137,7 @@ class DealBlog:
 
 
 
-            print "从博客列表页面中匹配出 %d 条博客信息" % (len(myItems))    # print myItems
+            print u"从博客列表页面中匹配出 %d 条博客信息" % (len(myItems))    # print myItems
 
             for item in myItems:
 
@@ -201,7 +203,7 @@ class DealBlog:
 
                 else :
 
-                    print "匹配出现问题..."
+                    print u"匹配出现问题..."
 
                     print "URL1 = ", url1
 

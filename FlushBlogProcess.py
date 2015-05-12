@@ -166,7 +166,7 @@ class FlushBlogProcess:
         except Exception, ex:
 
             print ""
-            print "用户输入Ctrl+C 程序终止..."
+            print u"用户输入Ctrl+C 程序终止..."
 
             exit(0)
 
@@ -186,7 +186,7 @@ class FlushBlogProcess:
 
         print "--------------------------------------------------"
 
-        print "共计发现博客 %d 篇, 刷新方式%s" % (len(self.dealBlog.blogs), self.flushMode)
+        print u"共计发现博客 %d 篇, 刷新方式%s" % (len(self.dealBlog.blogs), self.flushMode)
 
         print "--------------------------------------------------"
 

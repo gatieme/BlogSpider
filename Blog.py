@@ -3,7 +3,7 @@
 
 import TerminalColor
 
-
+from colorama import init, Fore, Back, Style
 
 # 博客类
 
@@ -30,18 +30,32 @@ class Blog:
 
         #print "当前访问的博客地址", self.url
 
-        print TerminalColor.UseStyle("博客标题", fore = 'white'),
-        print TerminalColor.UseStyle(self.title, fore = 'blue'),
+        #print TerminalColor.UseStyle(u"博客标题", fore = 'white'),
+        #print TerminalColor.UseStyle(self.title.decode("utf-8"), fore = 'blue'),
 
-        print TerminalColor.UseStyle("博客地址", fore = 'white'),
-        print TerminalColor.UseStyle(self.url[-8:], fore = 'blue'),
+        #print TerminalColor.UseStyle(u"博客地址", fore = 'white'),
+        #print TerminalColor.UseStyle(self.url[-8:].decode("utf-8"), fore = 'blue'),
 
-        print TerminalColor.UseStyle("发表时间", fore = 'white'),
-        print TerminalColor.UseStyle(self.postdate, fore = 'blue'),
+        #print TerminalColor.UseStyle(u"发表时间", fore = 'white'),
+        #print TerminalColor.UseStyle(self.postdate.decode("utf-8"), fore = 'blue'),
 
-        print TerminalColor.UseStyle("阅读次数", fore = 'white'),
-        print TerminalColor.UseStyle(self.view, fore = 'red'),
+        #print TerminalColor.UseStyle(u"阅读次数", fore = 'white'),
+        #print TerminalColor.UseStyle(self.view, fore = 'red'),
 
-        print TerminalColor.UseStyle("评论条数", fore = 'white'),
-        print TerminalColor.UseStyle(self.comment, fore = 'red')
+        #print TerminalColor.UseStyle(u"评论条数", fore = 'white'),
+        #print TerminalColor.UseStyle(self.comment, fore = 'red')
+        init()
+        print (Fore.WHITE + u"博客标题"),
+        print (Fore.BLUE + self.title.decode("utf-8")),
 
+        print (Fore.WHITE + u"博客地址")
+        print (Fore.BLUE + self.url[-8:].decode("utf-8")),
+
+        print (Fore.WHITE + u"发表时间"),
+        print (Fore.BLUE + self.postdate.decode("utf-8")),
+
+        print (Fore.WHITE + u"阅读次数"),
+        print (Fore.RED + str(self.view)),
+
+        print (Fore.WHITE + u"评论条数"),
+        print (Fore.RED + str(self.comment))
