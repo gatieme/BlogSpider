@@ -80,7 +80,7 @@ class FlushBlogProcess:
             #print TerminalColor.UseStyle("Now, check the url = "), TerminalColor.UseStyle(blog.url[-8:], fore = 'green')
 
             init(autoreset = True)
-            print("Now, check the url = ")
+            print("Now, check the url = "),
             print(Fore.GREEN + blog.url[-8:])
 
             blog.view = blog.view + 1
