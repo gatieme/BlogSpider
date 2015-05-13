@@ -44,7 +44,8 @@ class Blog:
 
         #print TerminalColor.UseStyle(u"评论条数", fore = 'white'),
         #print TerminalColor.UseStyle(self.comment, fore = 'red')
-        init()
+        init(autoreset = True)
+
         print (Fore.WHITE + u"博客标题"),
         print (Fore.BLUE + self.title.decode("utf-8")),
 

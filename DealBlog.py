@@ -47,10 +47,12 @@ class DealBlog:
             currPageUrl = self.pageUrl + str(pos)
 
             #print u"当前博客页面地址: ", TerminalColor.UseStyle(currPageUrl, fore = "blue")
-            init()
-            print u"当前博客页面地址: ", 
+
+            init(autoreset = True)
+
+            print u"当前博客页面地址: ",
             print (Fore.BLUE + currPageUrl)
-            print(Fore.RESET + Back.RESET + Style.RESET_ALL)
+            #print(Fore.RESET + Back.RESET + Style.RESET_ALL)
 
             self.blogPages.append(currPageUrl) # 每个博客页面的地址
 
@@ -89,11 +91,11 @@ class DealBlog:
                 cn = urllib2.urlopen(req)
 
                 print u"开始访问博客列表页面: ", url
-                
+
                 page = cn.read( )
 
                 unicodePage = page.decode("utf-8")
-                
+
                 cn.close( )
 
             except urllib2.URLError, e:
