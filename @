@@ -18,7 +18,7 @@ import signal
 
 #import TerminalColor
 
-from colorama import init, Fore, Style
+form colorma import init, Fore
 
 from Blog import Blog
 
@@ -77,11 +77,7 @@ class FlushBlogProcess:
 
             cn = urllib2.urlopen(req)
 
-            #print TerminalColor.UseStyle("Now, check the url = "), TerminalColor.UseStyle(blog.url[-8:], fore = 'green')
-
-            init(autoreset = True)
-            print("Now, check the url = ")
-            print(Fore.GREEN + blog.url[-8:])
+            print TerminalColor.UseStyle("Now, check the url = "), TerminalColor.UseStyle(blog.url[-8:], fore = 'green')
 
             blog.view = blog.view + 1
 
