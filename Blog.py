@@ -49,7 +49,7 @@ class Blog:
         print (Fore.WHITE + u"博客标题"),
         print (Fore.BLUE + self.title.decode("utf-8")),
 
-        print (Fore.WHITE + u"博客地址")
+        print (Fore.WHITE + u"博客地址"),
         print (Fore.BLUE + self.url[-8:].decode("utf-8")),
 
         print (Fore.WHITE + u"发表时间"),
