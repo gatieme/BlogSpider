@@ -15,8 +15,6 @@ if __name__ == "__main__" :
     reload(sys)
     sys.setdefaultencoding( "utf-8" )
 
-
-
     flushBlog = FlushBlogProcess("http://blog.csdn.net/gatieme/article/list/", 9, 5, "random")
 
     flushBlog.Run( )

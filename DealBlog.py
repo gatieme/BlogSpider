@@ -12,7 +12,7 @@ from Blog import Blog
 
 from colorama import init, Fore, Back, Style
 
-
+import time, datetime
 
 # 刷新博客类
 
@@ -183,18 +183,15 @@ class DealBlog:
 
                     title = item[1].replace("\n", "")
 
-                    postdate = item[2].replace("\n", "")
-
-
+                    postdate = item[2].replace("\n", "").decode("utf-8")
+                    postdate = time.strptime(item[2].replace("\n", ""), "%Y-%m-%d %H:%M")
+                    postdate = datetime.datetime(*postdate[:6])
+                    #print "POSTDATE = ", postdate
 
                     view = item[4].replace("\n","")
-
                     view = int(view[1:-1])
 
-
-
                     comments = item[6].replace("\n","")
-
                     comments = int(comments[1:-1])
 
                     blog = Blog(url, title, postdate, view, comments)

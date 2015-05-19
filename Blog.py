@@ -5,6 +5,9 @@ import TerminalColor
 
 from colorama import init, Fore, Back, Style
 
+#import time, datetime
+from datetime import *
+
 # 博客类
 
 class Blog:
@@ -44,6 +47,7 @@ class Blog:
 
         #print TerminalColor.UseStyle(u"评论条数", fore = 'white'),
         #print TerminalColor.UseStyle(self.comment, fore = 'red')
+
         init(autoreset = True)
 
         print (Fore.WHITE + u"博客标题"),
@@ -52,8 +56,11 @@ class Blog:
         print (Fore.WHITE + u"博客地址"),
         print (Fore.BLUE + self.url[-8:].decode("utf-8")),
 
+
+        #print self.postdate.date( )
         print (Fore.WHITE + u"发表时间"),
-        print (Fore.BLUE + self.postdate.decode("utf-8")),
+        print (Fore.BLUE + self.postdate.strftime("%Y-%m-%d %X")),
+
 
         print (Fore.WHITE + u"阅读次数"),
         print (Fore.RED + str(self.view)),
