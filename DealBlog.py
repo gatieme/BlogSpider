@@ -22,13 +22,19 @@ class DealBlog:
 
     def __init__(self, pageUrl, pageSize):
 
-        self.pageSize   =     pageSize    # 博客页面数目
+        self.pageSize   =     pageSize      #  博客页面数目
 
-        self.pageUrl    =     pageUrl      # 博客源地址
+        self.pageUrl    =     pageUrl       #  博客源地址
 
-        self.blogPages  =     []            # 博客页面的地址
+        self.blogPages  =     []            #  博客页面的地址
 
-        self.blogs      =     []
+        self.blogs      =     []            #  待刷新的博客地址列表
+
+        #   目前设置为博客发表日期在一个月内的博客不进行刷新
+        self.noneBlogs  =     []            #  不期望刷新的地址列表
+
+        self.sysTime    =     time.localtime( )
+        self.sysTime    =     datetime.datetime(*self.sysTime[:6])
 
         print u"博客页面: ", self.pageUrl
 
@@ -197,8 +203,20 @@ class DealBlog:
                     blog = Blog(url, title, postdate, view, comments)
 
                     blog.Show( )
+                    
+                    # 将从页面中匹配出来的博客信息添加如博客列表中
+                    if  (self.sysTime - blog.postdate).days  > 30:
+                    
+                        self.blogs.append(blog)    
+                        print u"本博客已经发表了一个月, 添加到待刷新列表..."
 
-                    self.blogs.append(blog)    # 将从页面中匹配出来的博客信息添加如博客列表中
+                    else:
+                        
+                        self.noneBlogs.append(blog)
+                        print u"本博客距离发表不足一个月, 添加到拒绝刷新列表..."
+                        #print self.sysTime
+                        #print blog.postdate
+                        #print (self.sysTime - blog.postdate).days
 
                 else :
 
@@ -209,3 +227,11 @@ class DealBlog:
                     print "URL2 = ", url2
 
         return self.blogs
+
+
+
+
+if __name__ == "__main__":
+
+    currtime = time.localtime( )
+    print datetime.datetime(*currtime[:6])
