@@ -189,7 +189,11 @@ class FlushBlogProcess:
 
         print "--------------------------------------------------"
 
-        print u"共计发现博客 %d 篇, 刷新方式%s" % (len(self.dealBlog.blogs), self.flushMode)
+        print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
+
+        print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
+
+        print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
 
         print "--------------------------------------------------"
 
