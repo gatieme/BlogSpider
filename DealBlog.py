@@ -194,26 +194,27 @@ class DealBlog:
                     postdate = datetime.datetime(*postdate[:6])
                     #print "POSTDATE = ", postdate
 
+                    postdays = (self.sysTime - postdate).days   #  已经发表的天数
                     view = item[4].replace("\n","")
                     view = int(view[1:-1])
 
                     comments = item[6].replace("\n","")
                     comments = int(comments[1:-1])
 
-                    blog = Blog(url, title, postdate, view, comments)
+                    blog = Blog(url, title, postdate, postdays, view, comments)
 
                     blog.Show( )
-                    
+
                     # 将从页面中匹配出来的博客信息添加如博客列表中
-                    if  (self.sysTime - blog.postdate).days  > 30:
-                    
-                        self.blogs.append(blog)    
-                        print u"本博客已经发表了一个月, 添加到待刷新列表..."
+                    if postdays  > 30:
+
+                        self.blogs.append(blog)
+                        print u"本博客已经发表了 %d 天，超过一个月, 添加到待刷新列表..."  % (postdays)
 
                     else:
-                        
+
                         self.noneBlogs.append(blog)
-                        print u"本博客距离发表不足一个月, 添加到拒绝刷新列表..."
+                        print u"本博客刚刚发表了 %d 天，不足一个月, 添加到拒绝刷新列表..." % (postdays)
                         #print self.sysTime
                         #print blog.postdate
                         #print (self.sysTime - blog.postdate).days

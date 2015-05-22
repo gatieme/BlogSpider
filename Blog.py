@@ -15,7 +15,7 @@ class Blog:
         本类是现实中博客的类
 
     """
-    def __init__(self, url, title, postdate, view, comments):
+    def __init__(self, url, title, postdate, postdays, view, comments):
 
         self.url         =     url          # 博客的地址
 
@@ -23,10 +23,11 @@ class Blog:
 
         self.postdate    =     postdate    # 博客的发表时间
 
+        self.postdays    =     postdays    # 已经发表的天数
+
         self.view        =     view        # 博客的阅读次数
 
         self.comment     =     comments    # 博客的评论条数
-
 
 
     def Show(self):
