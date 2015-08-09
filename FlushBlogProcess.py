@@ -41,6 +41,8 @@ class FlushBlogProcess:
         self.semphore   刷新博客线程的信号量
 
         self.flushMode  sequential顺序刷新, random随机访问
+
+       # self.unflushList 不刷新列表， 在配置文件中添加，添加后的地址将永远不进行刷新
     """
 
     def __init__(self, pageUrl, pageSize, maxThread, flushMode = "random"):
@@ -51,7 +53,9 @@ class FlushBlogProcess:
 
         self.semphore  = threading.BoundedSemaphore(maxThread)  #  刷新博客线程的信号量
 
-        self.flushMode = flushMode                              # sequential顺序刷新, random随机访问
+        self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
+
+       # self.unflushList = unflushList                          #  永远不刷新的博客列表
 
 
     def AccessBlog(self, blog):
@@ -63,7 +67,7 @@ class FlushBlogProcess:
         参数     ：
 
             blog 待刷新的博客信息
-:wq
+
         """
 
         req = urllib2.Request(blog.url)
@@ -195,6 +199,7 @@ class FlushBlogProcess:
 
         print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
 
+#        print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
         print "--------------------------------------------------"
 
         signal.signal(signal.SIGTERM, self.SignalHandler)

@@ -137,13 +137,11 @@ class DealBlog:
 
             # 从博客页面中匹配出每个博客的地                                                                           址
 
-            reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a></span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+            reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
 
             pattern = re.compile(reHtml, re.S)
 
             myItems = re.findall(pattern, unicodePage)
-
-
 
             print u"从博客列表页面中匹配出 %d 条博客信息" % (len(myItems))    # print myItems
 
@@ -230,9 +228,68 @@ class DealBlog:
         return self.blogs
 
 
+def Test(url):
+    req = urllib2.Request(url)                # 建立页面请求
+
+    req.add_header("User-Agent", "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0)")
+
+    print u"获取到博客列表页面HTML源码"
+
+    try:
+
+        cn = urllib2.urlopen(req)
+
+        print u"开始访问博客列表页面: ", url
+
+        page = cn.read( )
+
+        unicodePage = page.decode("utf-8")
+
+        cn.close( )
+
+    except urllib2.URLError, e:
+
+        if hasattr(e, "reason"):
+
+            print "Failed to reach the server"
+
+            print "The reason:", e.reason
+
+        elif hasattr(e, "code"):
+
+            print "The server couldn't fulfill the request"
+
+            print "Error code:", e.code
+
+            print "Return content:", e.read()
+
+        else:
+
+            pass  #其他异常的处理
+
+
+    # 从博客页面中匹配出每个博客的地址
+
+    print u"开始用正则表达式匹配博客信息......"
+    # 从博客页面中匹配出每个博客的地                                                                           址
+
+    reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+    #reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>'
+
+    pattern = re.compile(reHtml, re.S)
+
+    myItems = re.findall(pattern, unicodePage)
+
+    print u"从博客列表页面中匹配出 %d 条博客信息" % (len(myItems))    # print myItems
+
+    for item in myItems:
+        print item
+
 
 
 if __name__ == "__main__":
 
     currtime = time.localtime( )
     print datetime.datetime(*currtime[:6])
+
+    Test("http://blog.csdn.net/gatieme/article/list/1")

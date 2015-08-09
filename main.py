@@ -47,15 +47,15 @@ if __name__ == "__main__" :
 
     else:       #  否则如果没有传递命令行参数
         #  从配置文件中读取参数信息
-        cf = ConfigParser.ConfigParser( )
+        cf        = ConfigParser.ConfigParser( )
         cf.read("fb.conf")
 
-        pageUrl = cf.get("url_conf", "pageUrl")
-        pageSize = int(cf.get("url_conf", "pageSize"))
+        pageUrl   = cf.get("url_conf", "pageUrl")
+        pageSize  = int(cf.get("url_conf", "pageSize"))
 
         maxThread = int(cf.get("flush_conf", "maxThread"))
         flushMode = cf.get("flush_conf", "flushMode")
-
+    #    unflushList   = cf.get("flush_conf", "unflush").split(',')
 
 
 
