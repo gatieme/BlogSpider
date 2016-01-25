@@ -46,7 +46,7 @@ class FlushBlogProcess:
     """
 
     def __init__(self, pageUrl, pageSize, maxThread, flushMode = "random"):
-
+        #  初始化成员
         self.dealBlog  = DealBlog(pageUrl, pageSize)            #  处理博客类
 
         self.maxThread = maxThread                              #  同时刷新博客的最大线程数目
@@ -55,7 +55,26 @@ class FlushBlogProcess:
 
         self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
 
-       # self.unflushList = unflushList                          #  永远不刷新的博客列表
+        self.threadPools = []   # 线程池
+
+        #  获取博客页面的信息
+        self.dealBlog.GetBlogPage( )            # 检索出所有的博客列表页面
+
+        self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
+
+        print "--------------------------------------------------"
+
+        print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
+
+        print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
+
+        print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
+
+#       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
+        print "--------------------------------------------------"
+
+        signal.signal(signal.SIGTERM, self.SignalHandler)
+        signal.signal(signal.SIGINT, self.SignalHandler)                    #  永远不刷新的博客列表
 
 
     def AccessBlog(self, blog):
@@ -104,7 +123,7 @@ class FlushBlogProcess:
 
                 print "Error code:", e.code
 
-                print "Return content:", e.read()
+                print "Return content:", e.read( )
 
             else:
 
@@ -113,41 +132,6 @@ class FlushBlogProcess:
         time.sleep(2)
 
         self.semphore.release( )
-
-
-
-    def RandomFlushBlog(self):
-        """
-        随机访问每一篇博客
-        """
-        index = random.randint(0, len(self.dealBlog.blogs) - 1)
-
-        #print "index = ", index
-
-        blog = self.dealBlog.blogs[index]
-
-
-        self.semphore.acquire( )
-
-        T = threading.Thread(target = self.AccessBlog, args = (blog,))
-
-        T.setDaemon('True')
-
-        T.start( )
-
-    def SequentialFlushBlog(self):
-        """
-        顺序访问每一篇博客
-        """
-        for blog in self.dealBlog.blogs:
-
-            self.semphore.acquire( )
-
-            T = threading.Thread(target = self.AccessBlog, args = (blog,))
-
-            T.setDaemon('True')
-
-            T.start( )
 
 
 
@@ -178,6 +162,44 @@ class FlushBlogProcess:
             exit(0)
 
 
+    #def RandomFlushBlogThread(self):
+    def RandomFlushBlog(self):
+        """
+        随机访问每一篇博客
+        """
+        index = random.randint(0, len(self.dealBlog.blogs) - 1)
+
+        #print "index = ", index
+
+        blog = self.dealBlog.blogs[index]
+
+
+        self.semphore.acquire( )
+
+        T = threading.Thread(target = self.AccessBlog, args = (blog,))
+
+        T.setDaemon('True')
+
+        T.start( )
+
+
+#    def SequentialFlushBlog(self):
+    def SequentialFlushBlog(self):
+        """
+        顺序访问每一篇博客
+        """
+        for blog in self.dealBlog.blogs:
+
+            self.semphore.acquire( )
+
+            T = threading.Thread(target = self.AccessBlog, args = (blog,))
+
+            T.setDaemon('True')
+
+            T.start( )
+ 
+
+
     def Run(self):
 
         """
@@ -185,33 +207,20 @@ class FlushBlogProcess:
         刷新博客
 
         """
-
-        self.dealBlog.GetBlogPage( )            # 检索出所有的博客列表页面
-
-        self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
-
-
-        print "--------------------------------------------------"
-
-        print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
-
-        print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
-
-        print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
-
-#        print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
-        print "--------------------------------------------------"
-
-        signal.signal(signal.SIGTERM, self.SignalHandler)
-        signal.signal(signal.SIGINT, self.SignalHandler)
-
         while 1 :
             if self.flushMode == "random":
 
-                self.RandomFlushBlog( )
+                self.RandomFlushBlogThread( )
 
             elif self.flushMode == "sequential":
 
-                self.SequentialFlushBlog( )
+                self.SequentialFlushBlogThread( )
 
 
+if __name__ == "__main__":
+    
+    #flushBlog = FlushBlogThread(pageUrl, pageSize, maxThread, flushMode)
+
+    #flushBlog.RunFunction( )
+
+    pass
