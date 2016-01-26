@@ -197,7 +197,7 @@ class FlushBlogProcess:
             T.setDaemon('True')
 
             T.start( )
- 
+
 
 
     def Run(self):
@@ -218,7 +218,7 @@ class FlushBlogProcess:
 
 
 if __name__ == "__main__":
-    
+
     #flushBlog = FlushBlogThread(pageUrl, pageSize, maxThread, flushMode)
 
     #flushBlog.RunFunction( )

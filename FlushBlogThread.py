@@ -45,6 +45,13 @@ class FlushBlogThread:
     """
 
     def __init__(self, pageUrl, pageSize, maxThread, flushMode = "random"):
+
+        #---------------------
+        #  增加终止信号的处理
+        #---------------------
+        signal.signal(signal.SIGTERM, self.SignalHandler)
+        signal.signal(signal.SIGINT, self.SignalHandler)                    #  永远不刷新的博客列表
+
         #---------------------
         #  初始化成员
         #---------------------
@@ -60,9 +67,9 @@ class FlushBlogThread:
 
         #  依据刷新方式设置线程的函数
         if self.flushMode == "random":
-            
+
             self.threadFunction = self.RandomFlushBlogFunction
-            
+
         elif self.flushMode == "sequential":
 
             self.threadFunction = self.SequentialFlushBlogFunction
@@ -86,8 +93,6 @@ class FlushBlogThread:
 #       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
         print "--------------------------------------------------"
 
-        signal.signal(signal.SIGTERM, self.SignalHandler)
-        signal.signal(signal.SIGINT, self.SignalHandler)                    #  永远不刷新的博客列表
 
 
     def AccessBlog(self, blog):
@@ -161,10 +166,12 @@ class FlushBlogThread:
             join：如在一个线程B中调用threada.join()，则threada结束后，线程B才会接着threada.join()往后运行。
             setDaemon：主线程A启动了子线程B，调用b.setDaemaon(True)，则主线程结束时，会把子线程B也杀死，与C/C++中得默认效果是一样的。
         """
+        print "接收到用户的终止信号..."
         try :
 
-            T.stop( )
-            T.join()
+            for thread in self.threadPools:
+                    thread.stop( )
+                    thread.join()
 
         except Exception, ex:
 
@@ -203,7 +210,7 @@ class FlushBlogThread:
         while 1:
 
             for blog in self.dealBlog.blogs:
-                
+
                 self.semphore.acquire( )
                 self.AccessBlog(blog)
                 self.semphore.release( )
@@ -215,24 +222,24 @@ class FlushBlogThread:
         刷新博客
         """
 #        mutex = threading.Lock()
-        
+
 
         # 先创建线程对象
         for thread in xrange(0, self.maxThread):
-            
+
             self.threadPools.append(threading.Thread(target = self.threadFunction))
 
 
         # 启动所有线程
-        for thread in self.threadPools :  
+        for thread in self.threadPools :
 
             thread.start()
-        
 
 
 
 
-    
+
+
 
 
 
