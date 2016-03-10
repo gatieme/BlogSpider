@@ -204,7 +204,7 @@ class DealBlog:
                     blog.Show( )
 
                     # 将从页面中匹配出来的博客信息添加如博客列表中
-                    if postdays  > 30:
+                    if postdays  > 1:
 
                         self.blogs.append(blog)
                         print u"本博客已经发表了 %d 天，超过一个月, 添加到待刷新列表..."  % (postdays)
