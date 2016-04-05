@@ -70,8 +70,10 @@ if __name__ == "__main__" :
     print u"刷新线程数目 maxThread = ", maxThread
     print u"刷新博客方式 flushMode =", flushMode
 
-    flushBlog = FlushBlogThread(pageUrl, pageSize, maxThread, flushMode)
 
+    flushBlog = FlushBlogThread(pageUrl, pageSize, maxThread, flushMode)
     flushBlog.Run( )
 
+    #flushBlog = FlushBlogProcess(pageUrl, pageSize, maxThread, flushMode)
+    #flushBlog.Run( )
 

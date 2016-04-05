@@ -40,8 +40,8 @@ def  FlushBlogThreadPool :
 
         self.semphore  = threading.BoundedSemaphore(maxThread)  #  刷新博客线程的信号量
 
-        self.flushMode = flushMode     
-        
+        self.flushMode = flushMode
+
 
 
     def RandomFlushBlog(self):
@@ -54,9 +54,11 @@ def  FlushBlogThreadPool :
 
         blog = self.dealBlog.blogs[index]
 
-        
+
     def SequentialFlushBlog(self):
 
-"""
-"""
+        """
+        """
+
+
 if __name__ "__main__" :

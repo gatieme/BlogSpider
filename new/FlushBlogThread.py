@@ -58,7 +58,7 @@ class FlushBlogThread:
         self.dealBlog  = DealBlog(pageUrl, pageSize)            #  处理博客类
 
         self.maxThread = maxThread                              #  同时刷新博客的最大线程数目
-
+        self.stopped = False
         self.semphore  = threading.BoundedSemaphore(maxThread)  #  刷新博客线程的信号量
 
         self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
@@ -170,8 +170,8 @@ class FlushBlogThread:
         try :
 
             for thread in self.threadPools:
-                    thread.stop( )
-                    thread.join()
+                thread.stop( )
+                thread.join()
 
         except Exception, ex:
 
@@ -187,7 +187,7 @@ class FlushBlogThread:
         """
         随机访问每一篇博客
         """
-        while 1:
+        while self.stopped == False:
 
             #  随机生成一个索引index
             index = random.randint(0, len(self.dealBlog.blogs) - 1)
@@ -207,14 +207,28 @@ class FlushBlogThread:
         """
         顺序访问每一篇博客
         """
-        while 1:
+        while self.stopped == False:
 
             for blog in self.dealBlog.blogs:
 
+                if (self.stopped == True):
+                    break
                 self.semphore.acquire( )
                 self.AccessBlog(blog)
                 self.semphore.release( )
                 time.sleep(random.randint(8, 18))
+
+    def KeyBoardHandle(self):
+        while 1:
+            input = raw_input()
+            print "键入", input
+
+            if (input == "q"):
+                print "程序准备退出"
+                self.stopped = True
+                #for thread in self.threadPools:
+                #    thread.stop( )
+                #    thread.join( )
 
 
     def Run(self) :
@@ -226,9 +240,9 @@ class FlushBlogThread:
 
         # 先创建线程对象
         for thread in xrange(0, self.maxThread):
-
             self.threadPools.append(threading.Thread(target = self.threadFunction))
 
+        self.threadPools.append(threading.Thread(target = self.KeyBoardHandle))
 
         # 启动所有线程
         for thread in self.threadPools :
