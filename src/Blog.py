@@ -62,6 +62,8 @@ class Blog:
         print (Fore.WHITE + u"发表时间"),
         print (Fore.BLUE + self.postdate.strftime("%Y-%m-%d %X")),
 
+        print (Fore.WHITE + u"发表天数"),
+        print (Fore.BLUE + str(self.postdays))
 
         print (Fore.WHITE + u"阅读次数"),
         print (Fore.RED + str(self.view)),
