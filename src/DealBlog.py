@@ -175,7 +175,7 @@ class DealBlog:
                 blog.Show( )
 
                 # 将从页面中匹配出来的博客信息添加如博客列表中
-                if blog.postdays  > 0:
+                if blog.postdays  >= 0:
 
                     self.blogs.append(blog)
                     print u"本博客已经发表了 %d 天，超过一个月, 添加到待刷新列表..."  % (blog.postdays)
@@ -184,7 +184,7 @@ class DealBlog:
 
                     self.noneBlogs.append(blog)
                     print u"本博客刚刚发表了 %d 天，不足一个月, 添加到拒绝刷新列表..." % (blog.postdays)
-
+                    raw_input( )
             else :
 
                 print u"匹配出现问题..."
