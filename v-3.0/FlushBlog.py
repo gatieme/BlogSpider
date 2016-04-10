@@ -64,8 +64,6 @@ class FlushBlog:
 
         self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
 
-        self.threadPools = []   # 线程池
-        self.threadDeal
         self.totalFlushCount = 0
 
         #  依据刷新方式设置线程的函数
@@ -77,6 +75,8 @@ class FlushBlog:
 
             self.threadFunction = self.SequentialFlushBlogFunction
 
+
+        self.threadPools = []   # 线程池
         self.DealStopped = False                                #  DealBlog线程的运行标识
         self.FlushStopped = False                               #  FlushBlogThread线程的运行标识
 
