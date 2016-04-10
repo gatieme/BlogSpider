@@ -211,16 +211,14 @@ class DealBlog:
 
 
 
-    def GetBlogPageFunction(self):
+    def DealBlogFunction(self):
         """
         """
         #---------------------
         #  获取到博客页面的信息
         #---------------------
         self.dealBlog.GetBlogPage( )            # 检索出所有的博客列表页面
-
         self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
-
         self.dealBlog.ListBlogs( )
 
 
