@@ -59,15 +59,13 @@ class FlushBlog:
 
         self.maxThread = maxThread                              #  同时刷新博客的最大线程数目
 
-        self.DealStopped = False                                #  DealBlog线程的运行标识
-        self.FlushStopped = False                               #  FlushBlogThread线程的运行标识
 
         self.semphore  = threading.BoundedSemaphore(maxThread)  #  刷新博客线程的信号量
 
         self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
 
         self.threadPools = []   # 线程池
-
+        self.threadDeal
         self.totalFlushCount = 0
 
         #  依据刷新方式设置线程的函数
@@ -79,7 +77,13 @@ class FlushBlog:
 
             self.threadFunction = self.SequentialFlushBlogFunction
 
+        self.DealStopped = False                                #  DealBlog线程的运行标识
+        self.FlushStopped = False                               #  FlushBlogThread线程的运行标识
+
+        self.theadDeal = threading.Thread(name = "DealBlog", target = self.DealBlogFunction)
         #self.GetBlogPageFunction( )
+        for thread in xrange(0, self.maxThread):
+            self.threadPools.append(threading.Thread(name = "FlushBlog-" + str(thread + 1), target = self.threadFunction))
 
 
 
@@ -295,13 +299,8 @@ class FlushBlog:
         """
         #mutex = threading.Lock()
 
-        self.threadPools.append(threading.Thread(name = "DealBlog", target = self.DealBlogFunction))
-        #self.GetBlogPageFunction( )
-
-        # 先创建线程对象
-        for thread in xrange(0, self.maxThread):
-            self.threadPools.append(threading.Thread(name = "FlushBlog-" + str(thread + 1), target = self.threadFunction))
-
+        print "线程", self.threadDeal.name, "启动..."
+        self.threadDeal.start( )
 
         # 启动所有线程
         for thread in self.threadPools :
