@@ -27,7 +27,7 @@ from DealBlog import DealBlog
 
 #   刷新博客进程
 
-class FlushBlogThread:
+class FlushBlog:
     """
         刷新博客进程
 
