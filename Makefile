@@ -1,5 +1,4 @@
-COMMIT="刷新输出信息用互斥锁保护, 从而保解决信息的乱序输出问题..."
-
+COMMIT="增加了访问次数的计数器blog.flushcount"
 
 
 github :

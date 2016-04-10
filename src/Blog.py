@@ -29,6 +29,7 @@ class Blog:
 
         self.comment     =     comments    # 博客的评论条数
 
+        self.flushcount  =     0           # 刷新计数器
 
     def Show(self):
 

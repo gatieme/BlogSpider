@@ -106,7 +106,7 @@ class FlushBlogThread:
             #print(Fore.GREEN + blog.url[-8:] + ", " +blog.title)
             #print("")
 
-            blog.view = blog.view + 1
+            blog.flushcount += 1  # 刷新次数增加1
             #blog.Show( )
             cn.close( )
 
@@ -164,7 +164,8 @@ class FlushBlogThread:
         init(autoreset = True)
         #print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "]"),
         print(Fore.RED + "[" + str(index).zfill(3) + "/" + str(length).zfill(3) + "]"),
-        print("Now url = " + Fore.BLUE + blog.url[-8:]),
+        print("Now " + Fore.WHITE + "(" + str(blog.flushcount).zfill(4) + ")"),
+        print("url = " + Fore.BLUE + blog.url[-8:]),
         print("title = " + Fore.GREEN + blog.title)
         print("")
 
