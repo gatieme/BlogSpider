@@ -244,13 +244,15 @@ class FlushBlogThread:
             #print "键入", input
 
             if (input == "q" or input == "quit"):
+
                 print "接收到用户的指令", input, "程序准备退出..."
                 self.Stop( )
+
             elif(input == "ls" or input == "list"):
+
                 print "列出所有的线程的信息..."
                 for thread in self.threadPools:
                         print "线程", thread.name
-
 
     def GetBlogPageFunction(self):
         """
