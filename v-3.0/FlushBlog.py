@@ -80,7 +80,7 @@ class FlushBlog:
         self.DealStopped = False                                #  DealBlog线程的运行标识
         self.FlushStopped = False                               #  FlushBlogThread线程的运行标识
 
-        self.theadDeal = threading.Thread(name = "DealBlog", target = self.DealBlogFunction)
+        self.threadDeal = threading.Thread(name = "DealBlog", target = self.DealBlogFunction)
         #self.GetBlogPageFunction( )
         for thread in xrange(0, self.maxThread):
             self.threadPools.append(threading.Thread(name = "FlushBlog-" + str(thread + 1), target = self.threadFunction))
