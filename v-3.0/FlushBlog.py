@@ -271,7 +271,7 @@ class FlushBlog:
         self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
         print "DealBlog线程完成了自己的工作, 正在准备退出..."
         self.ListBlogs( )
-        #self.FlushStopped = True
+        self.DealStopped = True
 
     def ListBlogs(self):
         """
