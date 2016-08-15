@@ -147,7 +147,7 @@ class FlushBlogThread:
 
                 pass  #其他异常的处理
 
-#        time.sleep(2)
+#        
 
 #        self.semphore.release( )
 
@@ -200,7 +200,7 @@ class FlushBlogThread:
             self.semphore.acquire( )
             self.AccessBlog(blog)
             self.semphore.release( )
-
+            time.sleep(random.randint(8, 18))
 
 
     def SequentialFlushBlogFunction(self):
@@ -214,7 +214,7 @@ class FlushBlogThread:
                 self.semphore.acquire( )
                 self.AccessBlog(blog)
                 self.semphore.release( )
-
+                time.sleep(random.randint(8, 18))
 
 
     def Run(self) :

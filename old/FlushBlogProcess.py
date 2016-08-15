@@ -129,7 +129,7 @@ class FlushBlogProcess:
 
                 pass  #其他异常的处理
 
-        time.sleep(2)
+        time.sleep(10)
 
         self.semphore.release( )
 
