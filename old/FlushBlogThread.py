@@ -123,7 +123,7 @@ class FlushBlogThread:
 
             blog.view = blog.view + 1
 
-            blog.Show( )
+            #blog.Show( )
 
             cn.close( )
 
