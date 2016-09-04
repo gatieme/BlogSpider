@@ -120,7 +120,7 @@ class FlushBlogThread:
             init(autoreset = True)
             print("Now, check the url = "),
             print(Fore.GREEN + blog.url[-8:])
-
+            print("")
             blog.view = blog.view + 1
 
             #blog.Show( )
