@@ -119,7 +119,7 @@ class FlushBlogThread:
 
             init(autoreset = True)
             print("Now, check the url = "),
-            print(Fore.GREEN + blog.url[-8:])
+            print(Fore.GREEN + blog.url[-8:] + ", " +blog.title)
             print("")
             blog.view = blog.view + 1
 
@@ -147,7 +147,7 @@ class FlushBlogThread:
 
                 pass  #其他异常的处理
 
-#        
+#
 
 #        self.semphore.release( )
 
