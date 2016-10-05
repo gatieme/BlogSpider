@@ -210,11 +210,11 @@ class FlushBlogProcess:
         while 1 :
             if self.flushMode == "random":
 
-                self.RandomFlushBlogThread( )
+                self.RandomFlushBlog( )
 
             elif self.flushMode == "sequential":
 
-                self.SequentialFlushBlogThread( )
+                self.SequentialFlushBlog( )
 
 
 if __name__ == "__main__":

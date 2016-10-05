@@ -58,7 +58,7 @@ class FlushBlogThread:
         self.dealBlog  = DealBlog(pageUrl, pageSize)            #  处理博客类
 
         self.maxThread = maxThread                              #  同时刷新博客的最大线程数目
-
+        self.stopped = False
         self.semphore  = threading.BoundedSemaphore(maxThread)  #  刷新博客线程的信号量
 
         self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
@@ -163,15 +163,13 @@ class FlushBlogThread:
 
         python对于thread的管理中有两个函数：join和setDaemon
 
-            join：如在一个线程B中调用threada.join()，则threada结束后，线程B才会接着threada.join()往后运行。
+            join：如在一个线程B中调用thread.join()，则threada结束后，线程B才会接着threada.join()往后运行。
             setDaemon：主线程A启动了子线程B，调用b.setDaemaon(True)，则主线程结束时，会把子线程B也杀死，与C/C++中得默认效果是一样的。
         """
         print "接收到用户的终止信号..."
         try :
 
-            for thread in self.threadPools:
-                    thread.stop( )
-                    thread.join()
+            self.Stop( )
 
         except Exception, ex:
 
@@ -187,7 +185,7 @@ class FlushBlogThread:
         """
         随机访问每一篇博客
         """
-        while 1:
+        while self.stopped == False:
 
             #  随机生成一个索引index
             index = random.randint(0, len(self.dealBlog.blogs) - 1)
@@ -202,19 +200,46 @@ class FlushBlogThread:
             self.semphore.release( )
             time.sleep(random.randint(8, 18))
 
+        #print "线程退出..."
 
     def SequentialFlushBlogFunction(self):
         """
         顺序访问每一篇博客
         """
-        while 1:
+        while self.stopped == False:
 
             for blog in self.dealBlog.blogs:
 
+                if (self.stopped == True):
+                    break
                 self.semphore.acquire( )
                 self.AccessBlog(blog)
                 self.semphore.release( )
                 time.sleep(random.randint(8, 18))
+        #print "线程退出..."
+
+    def Stop(self):
+        self.stopped = True
+        print "等待所有线程安全退出..."
+
+        for thread in self.threadPools:
+            print "线程", thread.name, "终止..."
+            thread.join( )
+        print "所有的线程都已经终止, 程序退出..."
+        exit(0)
+
+
+    def KeyBoardHandle(self):
+
+        while self.stopped == False:
+            input = raw_input()
+            #print "键入", input
+
+            if (input == "q"):
+                print "接收到用户的指令", input, "程序准备退出"
+
+                self.Stop( )
+
 
 
     def Run(self) :
@@ -226,15 +251,17 @@ class FlushBlogThread:
 
         # 先创建线程对象
         for thread in xrange(0, self.maxThread):
-
             self.threadPools.append(threading.Thread(target = self.threadFunction))
 
+        #self.threadPools.append(threading.Thread(target = self.KeyBoardHandle))
 
         # 启动所有线程
         for thread in self.threadPools :
-
+            print "线程", thread.name, "启动..."
             thread.start( )
 
+        print "主线程开始接收用户指令..."
+        self.KeyBoardHandle( )
 
 
 
