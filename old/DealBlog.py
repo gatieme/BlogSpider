@@ -228,6 +228,38 @@ class DealBlog:
         return self.blogs
 
 
+
+    def GetBlogPageFunction(self):
+        """
+        """
+        #---------------------
+        #  获取到博客页面的信息
+        #---------------------
+        self.dealBlog.GetBlogPage( )            # 检索出所有的博客列表页面
+
+        self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
+
+        self.dealBlog.ListBlogs( )
+
+
+
+    def ListBlogs(self):
+        """
+        """
+        print "--------------------------------------------------"
+
+        print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
+
+        print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
+
+        print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
+
+#       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
+        print "--------------------------------------------------"
+
+
+
+
 def Test(url):
     req = urllib2.Request(url)                # 建立页面请求
 
