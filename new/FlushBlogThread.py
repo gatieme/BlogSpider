@@ -58,12 +58,15 @@ class FlushBlogThread:
         self.dealBlog  = DealBlog(pageUrl, pageSize)            #  处理博客类
 
         self.maxThread = maxThread                              #  同时刷新博客的最大线程数目
+
         self.stopped = False
+
         self.semphore  = threading.BoundedSemaphore(maxThread)  #  刷新博客线程的信号量
 
         self.flushMode = flushMode                              #  sequential顺序刷新, random随机访问
 
         self.threadPools = []   # 线程池
+
 
         #  依据刷新方式设置线程的函数
         if self.flushMode == "random":
@@ -74,29 +77,11 @@ class FlushBlogThread:
 
             self.threadFunction = self.SequentialFlushBlogFunction
 
-
-        #---------------------
-        #  获取到博客页面的信息
-        #---------------------
-        self.dealBlog.GetBlogPage( )            # 检索出所有的博客列表页面
-
-        self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
-
-        print "--------------------------------------------------"
-
-        print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
-
-        print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
-
-        print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
-
-#       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
-        print "--------------------------------------------------"
+        #self.GetBlogPageFunction( )
 
 
 
     def AccessBlog(self, blog):
-
         """
 
         函数功能： 访问blog的一次, 并将博客访问次数加1
@@ -104,7 +89,6 @@ class FlushBlogThread:
         参数     ：
 
             blog 待刷新的博客信息
-
         """
 
         req = urllib2.Request(blog.url)
@@ -117,14 +101,13 @@ class FlushBlogThread:
 
             #print TerminalColor.UseStyle("Now, check the url = "), TerminalColor.UseStyle(blog.url[-8:], fore = 'green')
 
-            init(autoreset = True)
-            print("Now, check the url = "),
-            print(Fore.GREEN + blog.url[-8:] + ", " +blog.title)
-            print("")
+            #init(autoreset = True)
+            #print("Now, check the url = "),
+            #print(Fore.GREEN + blog.url[-8:] + ", " +blog.title)
+            #print("")
+
             blog.view = blog.view + 1
-
             #blog.Show( )
-
             cn.close( )
 
         except urllib2.URLError, e:
@@ -132,15 +115,12 @@ class FlushBlogThread:
             if hasattr(e, "reason"):
 
                 print "Failed to reach the server"
-
                 print "The reason:", e.reason
 
             elif hasattr(e, "code"):
 
                 print "The server couldn't fulfill the request"
-
                 print "Error code:", e.code
-
                 print "Return content:", e.read( )
 
             else:
@@ -187,36 +167,65 @@ class FlushBlogThread:
         """
         while self.stopped == False:
 
+            if (len(self.dealBlog.blogs) == 0):
+                print "没有博客待刷新..."
+                time.sleep(5)
+                continue
+
             #  随机生成一个索引index
             index = random.randint(0, len(self.dealBlog.blogs) - 1)
 
-            #print "index = ", index
-
             #  取出当前的索引index的博客信息
             blog = self.dealBlog.blogs[index]
+            if (self.stopped == True):
+                break
+
+            # show blog information
+            init(autoreset = True)
+            print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "]"),
+            print("Now url = " + Fore.BLUE + blog.url[-8:]),
+            print("title = " + Fore.GREEN + blog.title)
+            print("")
 
             self.semphore.acquire( )
             self.AccessBlog(blog)
             self.semphore.release( )
             time.sleep(random.randint(8, 18))
+            #print "线程退出..."
 
-        #print "线程退出..."
+
 
     def SequentialFlushBlogFunction(self):
         """
         顺序访问每一篇博客
         """
+
+        index = 0
         while self.stopped == False:
+            if (len(self.dealBlog.blogs) == 0):
+                print "没有博客待刷新..."
+                time.sleep(5)
+                continue
+            #for blog in self.dealBlog.blogs:
+            index = (index + 1) % len(self.dealBlog.blogs)
+            blog = self.dealBlog.blogs[index]
+            if (self.stopped == True):
+                break
 
-            for blog in self.dealBlog.blogs:
+            # show blog information
+            init(autoreset = True)
+            print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "]"),
+            print("Now check url = " + Fore.BLUE + blog.url[-8:]),
+            print("title = " + Fore.GREEN + blog.title)
+            print("")
 
-                if (self.stopped == True):
-                    break
-                self.semphore.acquire( )
-                self.AccessBlog(blog)
-                self.semphore.release( )
-                time.sleep(random.randint(8, 18))
+            self.semphore.acquire( )
+            self.AccessBlog(blog)
+            self.semphore.release( )
+            time.sleep(random.randint(8, 18))
         #print "线程退出..."
+
+
 
     def Stop(self):
         self.stopped = True
@@ -227,6 +236,8 @@ class FlushBlogThread:
             thread.join( )
         print "所有的线程都已经终止, 程序退出..."
         exit(0)
+
+
 
 
     def KeyBoardHandle(self):
@@ -244,18 +255,47 @@ class FlushBlogThread:
                         print "线程", thread.name
 
 
+    def GetBlogPageFunction(self):
+        """
+        """
+        #---------------------
+        #  获取到博客页面的信息
+        #---------------------
+        self.dealBlog.GetBlogPage( )            # 检索出所有的博客列表页面
+        self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
+        print "DealBlog线程完成了自己的工作, 正在准备退出..."
+        self.ListBlogs( )
+        return
+
+    def ListBlogs(self):
+        """
+        """
+        print "--------------------------------------------------"
+        print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
+        print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
+        print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
+#       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
+        print "--------------------------------------------------"
+
+
+
+
+
     def Run(self) :
         """
         刷新博客
         """
-#        mutex = threading.Lock()
+        #mutex = threading.Lock()
 
+        #self.threadPools.append(threading.Thread(target = self.KeyBoardHandle))
+
+        self.threadPools.append(threading.Thread(name = "DealBlog", target = self.GetBlogPageFunction))
+        #self.GetBlogPageFunction( )
 
         # 先创建线程对象
         for thread in xrange(0, self.maxThread):
-            self.threadPools.append(threading.Thread(target = self.threadFunction))
+            self.threadPools.append(threading.Thread(name = "FlushBlog-" + str(thread + 1), target = self.threadFunction))
 
-        #self.threadPools.append(threading.Thread(target = self.KeyBoardHandle))
 
         # 启动所有线程
         for thread in self.threadPools :
