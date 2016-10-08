@@ -191,8 +191,10 @@ class DealBlog:
                     postdate = time.strptime(item[2].replace("\n", ""), "%Y-%m-%d %H:%M")
                     postdate = datetime.datetime(*postdate[:6])
                     #print "POSTDATE = ", postdate
-
                     postdays = (self.sysTime - postdate).days   #  已经发表的天数
+                    if (postdays < 0):
+                        print "当前系统时间小于博客发布时间, 可能系统的时间不正确, 请注意检查..."
+                        postdays = 1
                     view = item[4].replace("\n","")
                     view = int(view[1:-1])
 
@@ -200,11 +202,10 @@ class DealBlog:
                     comments = int(comments[1:-1])
 
                     blog = Blog(url, title, postdate, postdays, view, comments)
-
                     blog.Show( )
 
                     # 将从页面中匹配出来的博客信息添加如博客列表中
-                    if postdays  > 1:
+                    if postdays  > 0:
 
                         self.blogs.append(blog)
                         print u"本博客已经发表了 %d 天，超过一个月, 添加到待刷新列表..."  % (postdays)
@@ -213,16 +214,11 @@ class DealBlog:
 
                         self.noneBlogs.append(blog)
                         print u"本博客刚刚发表了 %d 天，不足一个月, 添加到拒绝刷新列表..." % (postdays)
-                        #print self.sysTime
-                        #print blog.postdate
-                        #print (self.sysTime - blog.postdate).days
 
                 else :
 
                     print u"匹配出现问题..."
-
                     print "URL1 = ", url1
-
                     print "URL2 = ", url2
 
         return self.blogs
@@ -247,13 +243,9 @@ class DealBlog:
         """
         """
         print "--------------------------------------------------"
-
         print u"共计发现博客 %d 篇" % (len(self.dealBlog.blogs) + len(self.dealBlog.noneBlogs))
-
         print u"待刷新博客 %d 篇，刷新方式 %s" % (len(self.dealBlog.blogs),  self.flushMode)
-
         print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
-
 #       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
         print "--------------------------------------------------"
 
@@ -306,6 +298,7 @@ def Test(url):
     # 从博客页面中匹配出每个博客的地                                                                           址
 
     reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+    #reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
     #reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>'
 
     pattern = re.compile(reHtml, re.S)
