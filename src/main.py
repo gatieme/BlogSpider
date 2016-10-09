@@ -12,7 +12,6 @@ from FlushBlogThread import FlushBlogThread
 
 
 
-
 if __name__ == "__main__" :
 
     #  重新设置编码集

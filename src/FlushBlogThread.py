@@ -159,6 +159,14 @@ class FlushBlogThread:
 
             exit(0)
 
+    def ShowBlog(self, blog, index, length):
+        # show blog information
+        init(autoreset = True)
+        #print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "]"),
+        print(Fore.RED + "[" + str(index).zfill(3) + "/" + str(length).zfill(3) + "] "),
+        print("Now url = " + Fore.BLUE + blog.url[-8:]),
+        print("title = " + Fore.GREEN + blog.title)
+        print("")
 
 
     def RandomFlushBlogFunction(self):
@@ -180,15 +188,9 @@ class FlushBlogThread:
             if (self.stopped == True):
                 break
 
-            # show blog information
-            init(autoreset = True)
-            print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "]"),
-            print("Now url = " + Fore.BLUE + blog.url[-8:]),
-            print("title = " + Fore.GREEN + blog.title)
-            print("")
-
             self.semphore.acquire( )
             self.AccessBlog(blog)
+            self.ShowBlog(blog, index, len(self.dealBlog.blogs))
             self.semphore.release( )
             time.sleep(random.randint(8, 18))
             #print "线程退出..."
@@ -212,15 +214,9 @@ class FlushBlogThread:
             if (self.stopped == True):
                 break
 
-            # show blog information
-            init(autoreset = True)
-            print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "] "),
-            print("Now check url = " + Fore.BLUE + blog.url[-8:]),
-            print("title = " + Fore.GREEN + blog.title)
-            print("")
-
             self.semphore.acquire( )
             self.AccessBlog(blog)
+            self.ShowBlog(blog, index, len(self.dealBlog.blogs))
             self.semphore.release( )
             time.sleep(random.randint(8, 18))
         #print "线程退出..."
