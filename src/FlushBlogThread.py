@@ -163,7 +163,7 @@ class FlushBlogThread:
         # show blog information
         init(autoreset = True)
         #print(Fore.RED + "[" + str(index) + "/" + str(len(self.dealBlog.blogs)) + "]"),
-        print(Fore.RED + "[" + str(index).zfill(3) + "/" + str(length).zfill(3) + "] "),
+        print(Fore.RED + "[" + str(index).zfill(3) + "/" + str(length).zfill(3) + "]"),
         print("Now url = " + Fore.BLUE + blog.url[-8:]),
         print("title = " + Fore.GREEN + blog.title)
         print("")
