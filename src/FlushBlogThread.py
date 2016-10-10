@@ -276,15 +276,16 @@ class FlushBlogThread:
         print "--------------------------------------------------"
 
 
+    def Flush(self):
 
-
+        self.GetBlogPageFunction( )
+        self.treadFunction( )
 
     def Run(self) :
         """
         刷新博客
         """
         #mutex = threading.Lock()
-
 
         self.threadPools.append(threading.Thread(name = "DealBlog", target = self.GetBlogPageFunction))
         #self.GetBlogPageFunction( )
