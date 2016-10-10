@@ -261,7 +261,9 @@ class FlushBlogThread:
         self.dealBlog.GetBlogUrl( )             # 获取到每个博客的页面信息
         print "DealBlog线程完成了自己的工作, 正在准备退出..."
         self.ListBlogs( )
+
         return
+
 
     def ListBlogs(self):
         """
@@ -285,7 +287,7 @@ class FlushBlogThread:
 
 
         self.threadPools.append(threading.Thread(name = "DealBlog", target = self.GetBlogPageFunction))
-        self.GetBlogPageFunction( )
+        #self.GetBlogPageFunction( )
 
         # 先创建线程对象
         for thread in xrange(0, self.maxThread):
