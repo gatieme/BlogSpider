@@ -283,10 +283,9 @@ class FlushBlogThread:
         """
         #mutex = threading.Lock()
 
-        #self.threadPools.append(threading.Thread(target = self.KeyBoardHandle))
 
         self.threadPools.append(threading.Thread(name = "DealBlog", target = self.GetBlogPageFunction))
-        #self.GetBlogPageFunction( )
+        self.GetBlogPageFunction( )
 
         # 先创建线程对象
         for thread in xrange(0, self.maxThread):
@@ -299,4 +298,5 @@ class FlushBlogThread:
             thread.start( )
 
         print "主线程开始接收用户指令..."
+        #self.threadPools.append(threading.Thread(target = self.KeyBoardHandle))
         self.KeyBoardHandle( )
