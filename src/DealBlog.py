@@ -55,7 +55,6 @@ class DealBlog:
             #print u"当前博客页面地址: ", TerminalColor.UseStyle(currPageUrl, fore = "blue")
 
             init(autoreset = True)
-
             print u"当前博客页面地址: ",
             print (Fore.BLUE + currPageUrl)
             #print(Fore.RESET + Back.RESET + Style.RESET_ALL)
@@ -104,7 +103,9 @@ class DealBlog:
             else:
                 pass  #其他异常的处理
 
+        #print unicodePage
         return unicodePage
+
 
     def GetBlogFromPageHtml(self, unicodePage):
         """

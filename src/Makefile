@@ -5,3 +5,8 @@ github :
 	git commit -m $(COMMIT)
 	git push origin master
 
+clean :
+	rm -rf *.pyc
+
+run :
+	python main.py

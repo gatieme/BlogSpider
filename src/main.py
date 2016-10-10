@@ -18,7 +18,7 @@ if __name__ == "__main__" :
     reload(sys)
     sys.setdefaultencoding( "utf-8" )
 
-    sys.setrecursionlimit(1000000)
+    #sys.setrecursionlimit(1000000)
 
     if len(sys.argv) > 1:               #  如果在程序运行时，传递了命令行参数
 
