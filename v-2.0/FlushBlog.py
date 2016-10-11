@@ -166,6 +166,7 @@ class FlushBlog:
 
             exit(0)
 
+
     def ShowBlog(self, blog, index, length):
         # show blog information
         init(autoreset = True)
