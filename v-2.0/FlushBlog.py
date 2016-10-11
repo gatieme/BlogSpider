@@ -81,6 +81,7 @@ class FlushBlog:
         self.FlushStopped = False                               #  FlushBlogThread线程的运行标识
 
         self.threadDeal = threading.Thread(name = "DealBlog", target = self.DealBlogFunction)
+        #self.threadPools.append(self.threadDeal)
         #self.GetBlogPageFunction( )
         for thread in xrange(0, self.maxThread):
             self.threadPools.append(threading.Thread(name = "FlushBlog-" + str(thread + 1), target = self.threadFunction))
@@ -260,9 +261,19 @@ class FlushBlog:
             elif(input == "ls" or input == "list"):
 
                 print "列出所有的线程的信息..."
+                if self.DealStopped == False :
+                    print "线程", self.threadDeal.name
+                    print "当前检索出的博客数目 %d" % (len(self.dealBlog.blogs))
                 for thread in self.threadPools:
                         print "线程", thread.name
                 print "总刷新次数 %d, 博客文章数目 %d" % (self.totalFlushCount, len(self.dealBlog.blogs))
+
+
+    def IsStopped(self) :
+        return self.FlushStopped == True
+
+    def IsRunning(self) :
+        return self.FlushStopped == False
 
 
 

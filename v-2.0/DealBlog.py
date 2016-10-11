@@ -107,6 +107,36 @@ class DealBlog:
         return unicodePage
 
 
+    def RePattern(self, unicodePage, reStr) :
+        """
+        """
+        pattern = re.compile(reStr, re.S)
+
+        myItems = re.findall(pattern, unicodePage)
+
+        return myItems
+
+
+
+    def GetBlogStatisticsFromPageHtml(self, unicodePage):
+        """
+        获取博客的统计信息
+        """
+        reStr = r''
+        pattern = re.compile(reStr, re.S)
+        myItems = re.findall(pattern, unicodePage)
+
+        for item in myItems:
+            print "#------------------------------------------------------"
+            print item[0].replace("\n", "")         # 博客地址URL1(标题附带)
+            print item[1].replace("\n", "")         # 博客标题
+            print item[2].replace("\n", "")         # 博客发表时间
+            print item[3].replace("\n", "")         # 博客地址URL2(阅读次数附带)
+            print item[4].replace("\n", "")         # 博客阅读次数信息
+            print item[5].replace("\n", "")         # 博客地址URL3(评论条数附带)
+
+
+
     def GetBlogFromPageHtml(self, unicodePage):
         """
         """
@@ -117,14 +147,13 @@ class DealBlog:
         # 从博客页面中匹配出每个博客的地                                                                           址
 
         # 匹配出所有的博客信息(不匹配带置顶标识的博客信息)
-        #reHtml = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+        #reStr = r'<span class="link_title"><a href="(.*?)">\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
         # 匹配出带置顶标识的博客信息
-        #reHtml = r'<span class="link_title"><a href="(.*?)">(\s*<font color="red">.*?</font>|\s*)\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
-        #reHtml = r'<span class="link_title"><a href="(.*?)">(\s*<font color="red">\[置顶\]</font>(.*?)\s*|\s*(.*?)\s*)</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
-        reHtml = r'<span class="link_title"><a href="(.*?)">(?:\s*<font color="red">.*?</font>|\s*)\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+        #reStr = r'<span class="link_title"><a href="(.*?)">(\s*<font color="red">.*?</font>|\s*)\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+        #reStr = r'<span class="link_title"><a href="(.*?)">(\s*<font color="red">\[置顶\]</font>(.*?)\s*|\s*(.*?)\s*)</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
+        reStr = r'<span class="link_title"><a href="(.*?)">(?:\s*<font color="red">.*?</font>|\s*)\s*(.*?)\s*</a>\s*</span>.*?<span class="link_postdate">(.*?)</span>\s*<span class="link_view" title=".*?"><a href="(.*?)" title=".*?">.*?</a>(.*?)</span>\s*<span class="link_comments" title=".*?"><a href="(.*?)#comments" title=".*?" onclick=".*?">.*?</a>(.*?)</span>'
 
-
-        pattern = re.compile(reHtml, re.S)
+        pattern = re.compile(reStr, re.S)
 
         myItems = re.findall(pattern, unicodePage)
 
@@ -232,8 +261,6 @@ class DealBlog:
         print u"拒绝刷新博客 %d 篇" %(len(self.dealBlog.noneBlogs))
 #       print u"永不刷新博客 %d 篇" %(len(self.dealBlog.unflushList))
         print "--------------------------------------------------"
-
-
 
 
 
